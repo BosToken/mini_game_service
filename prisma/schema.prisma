@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  username  String?
+  email     String?
+  password  String?
+  discordId String?
+  cards     cardsOnUsers[]
+  team      teams?
+}
+
+model cards {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  characterId String
+  users       cardsOnUsers[]
+  cardDetail  cardDetails?
+}
+
+model cardsOnUsers {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
+  user   users  @relation(fields: [userId], references: [id])
+  cardId String @db.ObjectId
+  card   cards  @relation(fields: [cardId], references: [id])
+}
+
+model teams {
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId String  @unique @db.ObjectId
+  user   users   @relation(fields: [userId], references: [id])
+  cardId String?
+}
+
+model cardDetails {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  level    Int
+  cardId   String   @unique @db.ObjectId
+  card     cards    @relation(fields: [cardId], references: [id])
+  rarityId String   @db.ObjectId
+  rarity   rarities @relation(fields: [rarityId], references: [id])
+  roleId   String   @db.ObjectId
+  role     roles    @relation(fields: [roleId], references: [id])
+}
+
+model rarities {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  cardDetails cardDetails[]
+}
+
+model roles {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  cardDetails cardDetails[]
+}
