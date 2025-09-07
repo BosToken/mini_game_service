@@ -8,19 +8,81 @@ async function main() {
     },
   });
 
+  const userLimit = await prisma.userLimits.create({
+    data: {
+      userId: user.id,
+      gachaLimit: 0,
+      battleLimit: 0
+    },
+  });
+
   const rarity = await prisma.rarities.create({
     data: {
+        name: "Common",
+        description: "Common",
+        rate: 60,
+        minAtk: 10,
+        maxAtk: 50,
+        minHealth: 100,
+        maxHealth: 150
+    }
+  });
+
+  const rarity2 = await prisma.rarities.create({
+    data: {
+        name: "Uncommon",
+        description: "Uncommon",
+        rate: 25,
+        minAtk: 40,
+        maxAtk: 100,
+        minHealth: 140,
+        maxHealth: 200
+    }
+  });
+
+  const rarity3 = await prisma.rarities.create({
+    data: {
         name: "Rare",
-        description: "Rare"
+        description: "Rare",
+        rate: 10,
+        minAtk: 90,
+        maxAtk: 150,
+        minHealth: 190,
+        maxHealth: 250
+    }
+  });
+
+  const rarity4 = await prisma.rarities.create({
+    data: {
+        name: "Super Rare",
+        description: "Super Rare",
+        rate: 4,
+        minAtk: 140,
+        maxAtk: 200,
+        minHealth: 240,
+        maxHealth: 300
+    }
+  });
+
+  const rarity5 = await prisma.rarities.create({
+    data: {
+        name: "Specially Super Rare",
+        description: "Specially Super Rare",
+        rate: 1,
+        minAtk: 190,
+        maxAtk: 250,
+        minHealth: 290,
+        maxHealth: 350
     }
   });
 
   const role = await prisma.roles.create({
     data: {
         name: "Saber",
-        description: "Saber"
+        description: "Saber",
+        priority: 1
     }
-  })
+  });
 
   const card = await prisma.cards.create({
     data: {
@@ -37,10 +99,12 @@ async function main() {
 
   const cardDetail = await prisma.cardDetails.create({
     data: {
-        level: 0,
+        level: 1,
         cardId: card.id,
         rarityId: rarity.id,
-        roleId: role.id
+        roleId: role.id,
+        atk: 50,
+        health: 150 
     }
   })
 
