@@ -40,6 +40,9 @@ rarityRouter.post("/create", (req, res) => {
 rarityRouter.post("/update/:id", (req, res) => {
   rarityController.update(req, res);
 });
+rarityRouter.get("/random", (req, res) => {
+  rarityController.random(req, res);
+});
 
 // Role
 roleRouter.get("/", (req, res) => {

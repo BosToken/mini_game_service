@@ -2,6 +2,7 @@ const response = require("../utils/response");
 const teamValidate = require("../validators/team.validator");
 const teamAction = require("../actions/teams");
 const userAction = require("../actions/users");
+const cardOnUserAction = require("../actions/cardsOnUsers");
 
 module.exports = {
   async getById(req, res) {
@@ -40,14 +41,35 @@ module.exports = {
     try {
       const id = req.params.id;
       const request = req.body;
+      request.cardId = [...new Set(request.cardId)];
+      const team = await teamAction.getFirst({
+        where: {
+          id,
+        },
+      });
+      await Promise.all(
+          request.cardId.map(async (item) => {
+            let card = await cardOnUserAction.getFirst({
+              where: {
+                card: {
+                  cardDetail: {
+                    cardId: item
+                  }
+                }
+              }
+            })
+            if(card.userId != team.userId) return res.json(response.success(null, "This card was not found in your data"))
+          })
+        );
+
       const { error, value } = teamValidate.updateSchema.validate(request);
       if (error) {
         return res.status(400).json(response.error(error.details[0].message));
       }
-      const team = await teamAction.update(id, {
+      const updateTeam = await teamAction.update(id, {
         cardId: JSON.stringify(value.cardId),
-      });
-      return res.json(response.success(team));
+      })
+      return res.json(response.success(updateTeam));
     } catch (error) {
       return res.status(500).json(response.error(error));
     }

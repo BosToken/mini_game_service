@@ -16,6 +16,15 @@ model users {
   discordId String?
   cards     cardsOnUsers[]
   team      teams?
+  userLimit userLimits?
+}
+
+model userLimits {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @unique @db.ObjectId
+  user        users  @relation(fields: [userId], references: [id])
+  gachaLimit  Int
+  battleLimit Int
 }
 
 model cards {
@@ -49,12 +58,19 @@ model cardDetails {
   rarity   rarities @relation(fields: [rarityId], references: [id])
   roleId   String   @db.ObjectId
   role     roles    @relation(fields: [roleId], references: [id])
+  atk      Int
+  health   Int
 }
 
 model rarities {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
+  rate        Int
+  minAtk      Int
+  maxAtk      Int
+  minHealth   Int
+  maxHealth   Int
   cardDetails cardDetails[]
 }
 
@@ -62,5 +78,6 @@ model roles {
   id          String        @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
+  priority    Int
   cardDetails cardDetails[]
 }
