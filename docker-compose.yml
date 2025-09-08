@@ -28,6 +28,7 @@ services:
       MONGO_INITDB_DATABASE: mini_game_db
     ports:
       - "27019:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
     volumes:
       - mini_game_mongo_data:/data/db
 
