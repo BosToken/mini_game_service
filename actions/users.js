@@ -4,6 +4,10 @@ const model = require("../models/user");
 const actionCard = require("./cards");
 
 module.exports = {
+  
+  async getUnique(req) {
+    return await prisma.users.findUnique(req)
+  },
   async getCount(req) {
     return await prisma.users.count({
       where: {

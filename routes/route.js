@@ -7,6 +7,7 @@ const roleController = require("../controller/role");
 const cardController = require("../controller/card");
 const teamController = require("../controller/team");
 const battleController = require("../controller/battle");
+const authController = require("../controller/auth");
 
 const userRouter = express.Router();
 const rarityRouter = express.Router();
@@ -14,6 +15,10 @@ const roleRouter = express.Router();
 const cardRouter = express.Router();
 const teamRouter = express.Router();
 const battleRouter = express.Router();
+const authRouter = express.Router();
+
+const { authMiddleware } = require("../middlewares/jwtMiddleware");
+const limitMiddleware = require("../middlewares/limitMiddleware");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -25,7 +30,7 @@ userRouter.get("/id/:id", (req, res) => {
 userRouter.post("/create", (req, res) => {
   userController.create(req, res);
 });
-userRouter.post("/update/:id", (req, res) => {
+userRouter.post("/update", authMiddleware, (req, res) => {
   userController.update(req, res);
 });
 
@@ -78,16 +83,21 @@ teamRouter.get("/id/:id", (req, res) => {
 teamRouter.get("/user", (req, res) => {
   teamController.getByUser(req, res);
 });
-teamRouter.post("/update/:id", (req, res) => {
+teamRouter.post("/update", authMiddleware, (req, res) => {
   teamController.update(req, res);
 });
 
 // Battle
-battleRouter.get("/enemy/random", (req, res) => {
+battleRouter.get("/enemy/random", authMiddleware, (req, res) => {
   battleController.findBattle(req, res)
 })
-battleRouter.get("/enemy/request", (req, res) => {
+battleRouter.post("/enemy/request", authMiddleware, (req, res) => {
   battleController.requestBattle(req, res)
+})
+
+// Auth
+authRouter.post("/login", limitMiddleware.limiter, (req, res) => {
+  authController.login(req, res)
 })
 
 app.use("/user", userRouter);
@@ -96,3 +106,4 @@ app.use("/role", roleRouter);
 app.use("/card", cardRouter);
 app.use("/team", teamRouter);
 app.use("/battle", battleRouter);
+app.use("/auth", authRouter);

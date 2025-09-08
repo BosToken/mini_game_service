@@ -37,7 +37,8 @@ module.exports = {
   },
   async update(req, res) {
     try {
-      const id = req.params.id;
+      const user = req.user
+      const id = user.team.id
       const request = req.body;
       request.cardId = [...new Set(request.cardId)];
       const team = await teamAction.getFirst({

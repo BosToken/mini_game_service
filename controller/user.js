@@ -59,11 +59,10 @@ module.exports = {
       return res.status(500).json(response.error(error));
     }
   },
-
   async update(req, res) {
     try {
       const request = req.body;
-      const id = req.params.id;
+      const id = req.user.id;
       const { error, value } = userValidate.updateSchema.validate(request);
       if (error) {
         return res.status(400).json(response.error(error.details[0].message));

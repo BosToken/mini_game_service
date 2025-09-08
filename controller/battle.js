@@ -7,7 +7,10 @@ module.exports = {
   // Random Battle
   async findBattle(req, res) {
     try {
-      const request = req.body;
+      const user = req.user
+      const request = {
+        id: user.id
+      };
       const player = await this.teamCheck(request);
       if (!player) {
         return res
@@ -85,7 +88,11 @@ module.exports = {
   async requestBattle(req, res) {
     try {
       const request = req.body;
-      const player = await this.teamCheck(request.player);
+      const user = req.user
+      const requestPlayer = {
+        id: user.id
+      };
+      const player = await this.teamCheck(requestPlayer);
       if (!player) {
         return res
           .status(400)
@@ -119,6 +126,15 @@ module.exports = {
       const enemy = await userAction.getFirst({
         where: request.enemy,
       });
+      if (enemy.id == requestPlayer.id) {
+        return res
+          .status(400)
+          .json(
+            response.error(
+              `You can't battle yourself.`
+            )
+          );
+      }
       if (enemy.team.cardId == null) {
         return res
           .status(400)
