@@ -9,8 +9,8 @@ services:
       - .:/usr/src/app
     command: >
       bash -c "npm install &&
-               npx prisma migrate dev &&
-               node prisma/seeder/seed.js &&
+               npx prisma db push &&
+               node prisma/seeders/seed.js &&
                npx nodemon index.js"
     restart: always
     ports:
