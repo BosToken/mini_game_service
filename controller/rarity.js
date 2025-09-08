@@ -85,4 +85,35 @@ module.exports = {
       return error;
     }
   },
+  async randomTest(req, res) {
+    try {
+      const data = await rarityAction.get();
+      const totalRate = data.reduce((sum, item) => sum + item.rate, 0);
+      const rand = Math.random() * totalRate;
+      let cumulative = 0;
+
+      const selected = data.find((item) => {
+        cumulative += item.rate;
+        return rand < cumulative;
+      });
+
+      const atk =
+        Math.floor(Math.random() * (selected.maxAtk - selected.minAtk + 1)) +
+        selected.minAtk;
+      const health =
+        Math.floor(
+          Math.random() * (selected.maxHealth - selected.minHealth + 1)
+        ) + selected.minHealth;
+
+      const selectedData = {
+        id: selected.id,
+        rarity: selected.name,
+        atk,
+        health,
+      };
+      return res.json(response.success(selectedData));
+    } catch (error) {
+      return error;
+    }
+  },
 };

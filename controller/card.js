@@ -29,11 +29,9 @@ module.exports = {
   },
   async getByUser(req, res) {
     try {
-      const { request } = req.body;
+      const request = req.body;
       const user = await userAction.getFirst({
-        where: {
-          request,
-        },
+        where: request,
       });
       const cards = await cardOnUserAction.get({
         where: {
@@ -47,11 +45,9 @@ module.exports = {
   },
   async randomCreate(req, res) {
     try {
-      const { request } = req.body;
+      const request = req.body;
       const user = await userAction.getFirst({
-        where: {
-          request,
-        },
+        where: request,
       });
       const limit = await userLimitAction.getFirst({
         where: {
@@ -69,9 +65,8 @@ module.exports = {
           .getSeconds()
           .toString()
           .padStart(2, "0")}`;
-        return res.json(
-          response.success(
-            null,
+        return res.status(400).json(
+          response.error(
             `This feature is limited, please wait until ${formatted}`
           )
         );

@@ -13,6 +13,6 @@ module.exports = {
       },
     },
   },
-//   team: true,
+  team: true,
   userLimit: true
 };

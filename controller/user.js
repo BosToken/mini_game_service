@@ -1,4 +1,5 @@
 const response = require("../utils/response");
+const hash = require("../utils/hash");
 const userValidate = require("../validators/user.validator");
 const teamValidate = require("../validators/team.validator");
 const userAction = require("../actions/users");
@@ -35,6 +36,9 @@ module.exports = {
       const { error, value } = userValidate.createSchema.validate(request);
       if (error) {
         return res.status(400).json(response.error(error.details[0].message));
+      }
+      if (value.password) {
+        value.password = await hash.hash(value.password);
       }
       const user = await userAction.create(value);
       const { error: errorTeam, value: valueTeam } =

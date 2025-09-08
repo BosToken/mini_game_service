@@ -6,12 +6,14 @@ const rarityController = require("../controller/rarity");
 const roleController = require("../controller/role");
 const cardController = require("../controller/card");
 const teamController = require("../controller/team");
+const battleController = require("../controller/battle");
 
 const userRouter = express.Router();
 const rarityRouter = express.Router();
 const roleRouter = express.Router();
 const cardRouter = express.Router();
 const teamRouter = express.Router();
+const battleRouter = express.Router();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -41,7 +43,7 @@ rarityRouter.post("/update/:id", (req, res) => {
   rarityController.update(req, res);
 });
 rarityRouter.get("/random", (req, res) => {
-  rarityController.random(req, res);
+  rarityController.randomTest(req, res);
 });
 
 // Role
@@ -80,8 +82,17 @@ teamRouter.post("/update/:id", (req, res) => {
   teamController.update(req, res);
 });
 
+// Battle
+battleRouter.get("/enemy/random", (req, res) => {
+  battleController.findBattle(req, res)
+})
+battleRouter.get("/enemy/request", (req, res) => {
+  battleController.requestBattle(req, res)
+})
+
 app.use("/user", userRouter);
 app.use("/rarity", rarityRouter);
 app.use("/role", roleRouter);
 app.use("/card", cardRouter);
 app.use("/team", teamRouter);
+app.use("/battle", battleRouter);

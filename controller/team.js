@@ -21,11 +21,9 @@ module.exports = {
   },
   async getByUser(req, res) {
     try {
-      const { request } = req.body;
+      const request = req.body;
       const user = await userAction.getFirst({
-        where: {
-          request,
-        },
+        where: request,
       });
       const team = await teamAction.getFirst({
         where: {
@@ -48,19 +46,21 @@ module.exports = {
         },
       });
       await Promise.all(
-          request.cardId.map(async (item) => {
-            let card = await cardOnUserAction.getFirst({
-              where: {
-                card: {
-                  cardDetail: {
-                    cardId: item
-                  }
+        request.cardId.map(async (item) => {
+          let card = await cardOnUserAction.getFirst({
+            where: {
+              card: {
+                cardDetail: {
+                  cardId: item
                 }
               }
-            })
-            if(card.userId != team.userId) return res.json(response.success(null, "This card was not found in your data"))
-          })
-        );
+            }
+          });
+          if (card.userId != team.userId) {
+            throw new Error("This card was not found in your data");
+          }
+        })
+      );
 
       const { error, value } = teamValidate.updateSchema.validate(request);
       if (error) {

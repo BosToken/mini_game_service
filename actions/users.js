@@ -4,6 +4,14 @@ const model = require("../models/user");
 const actionCard = require("./cards");
 
 module.exports = {
+  async getCount(req) {
+    return await prisma.users.count({
+      where: {
+        ...req?.where,
+      },
+      ...req,
+    });
+  },
   async get(req) {
     const user = await prisma.users.findMany({
       include: model,
@@ -21,7 +29,6 @@ module.exports = {
           },
         },
       });
-      user.cards = characterFetch;
       user.team.cards = cards;
     }
     return user;
@@ -43,10 +50,18 @@ module.exports = {
           },
         },
       });
-      user.cards = characterFetch;
       user.team.cards = cards;
     }
     return user;
+  },
+  async getRandom(req) {
+    const user = await prisma.users.findFirst({
+      include: model,
+      where: {
+        ...req?.where,
+      },
+      ...req,
+    });
   },
   async create(req) {
     return await prisma.users.create({
