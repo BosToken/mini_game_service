@@ -19,20 +19,19 @@ services:
       - mongo
 
   mongo:
-  image: mongo:4.4.18
-  container_name: mini-game-api-mongo
-  restart: always
-  environment:
-    MONGO_INITDB_ROOT_USERNAME: root
-    MONGO_INITDB_ROOT_PASSWORD: linux001
-    MONGO_INITDB_DATABASE: mini_game_db
-  ports:
-    - "27019:27017"
-  command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
-  volumes:
-    - mini_game_mongo_data:/data/db
-    - ./mongo-init:/docker-entrypoint-initdb.d
-
+    image: mongo:4.4.18
+    container_name: mini-game-api-mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: linux001
+      MONGO_INITDB_DATABASE: mini_game_db
+    ports:
+      - "27019:27017"
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
+    volumes:
+      - mini_game_mongo_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
 
 volumes:
   mini_game_mongo_data:
