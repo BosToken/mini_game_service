@@ -2,7 +2,7 @@ name: mini-game-service
 
 services:
   node:
-    image: node:18
+    image: node:20
     container_name: mini-game-api-node
     working_dir: /usr/src/app
     volumes:
@@ -26,5 +26,12 @@ services:
       - "27019:27017"
     volumes:
       - mini_game_mongo_data:/data/db
+    command: mongod --replSet rs0 --bind_ip_all # Tambahkan baris ini
+    healthcheck: # Tambahkan bagian healthcheck ini
+      test: test $$(mongosh --eval "rs.initiate()" | grep 'ok') == 1
+      interval: 10s
+      timeout: 5s
+      retries: 50
+
 volumes:
   mini_game_mongo_data:
