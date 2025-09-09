@@ -4,12 +4,12 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model users {
-  id        String         @id @default(uuid())
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
   username  String?        @unique
   email     String?        @unique
   password  String?
@@ -20,50 +20,50 @@ model users {
 }
 
 model userLimits {
-  id          String @id @default(uuid())
-  userId      String @unique 
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @unique @db.ObjectId
   user        users  @relation(fields: [userId], references: [id])
   gachaLimit  Int
   battleLimit Int
 }
 
 model cards {
-  id          String         @id @default(uuid())
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
   characterId String
   users       cardsOnUsers[]
   cardDetail  cardDetails?
 }
 
 model cardsOnUsers {
-  id     String @id @default(uuid())
-  userId String 
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
   user   users  @relation(fields: [userId], references: [id])
-  cardId String 
+  cardId String @db.ObjectId
   card   cards  @relation(fields: [cardId], references: [id])
 }
 
 model teams {
-  id     String  @id @default(uuid())
-  userId String  @unique
+  id     String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId String  @unique @db.ObjectId
   user   users   @relation(fields: [userId], references: [id])
   cardId String?
 }
 
 model cardDetails {
-  id       String   @id @default(uuid())
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
   level    Int
-  cardId   String   @unique 
+  cardId   String   @unique @db.ObjectId
   card     cards    @relation(fields: [cardId], references: [id])
-  rarityId String  
+  rarityId String   @db.ObjectId
   rarity   rarities @relation(fields: [rarityId], references: [id])
-  roleId   String   
+  roleId   String   @db.ObjectId
   role     roles    @relation(fields: [roleId], references: [id])
   atk      Int
   health   Int
 }
 
 model rarities {
-  id          String        @id @default(uuid())
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   rate        Int
@@ -75,7 +75,7 @@ model rarities {
 }
 
 model roles {
-  id          String        @id @default(uuid())
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   priority    Int

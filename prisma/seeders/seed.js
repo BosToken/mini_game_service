@@ -86,7 +86,7 @@ async function main() {
 
   const card = await prisma.cards.create({
     data: {
-        characterId: "1549d061-3449-4220-91c3-f538f11d386a",
+        characterId: "309f5da5-078c-447e-b59d-02b277fa8ac5",
     }
   })
 
