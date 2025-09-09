@@ -2,25 +2,16 @@ name: mini-game-service
 
 services:
   node:
-    image: node:20
+    image: node:18
     container_name: mini-game-api-node
     working_dir: /usr/src/app
     volumes:
       - .:/usr/src/app
     command: >
-      bash -c "
-        echo 'Waiting for MongoDB to be ready...';
-        while ! nc -z mongo 27017; do
-          echo 'MongoDB is not ready yet. Waiting...';
-          sleep 1;
-        done;
-
-        echo 'MongoDB is ready. Running startup commands...';
-
-        npm install &&
-        npx prisma db push &&
-        node prisma/seeders/seed.js &&
-        npx nodemon index.js"
+      bash -c "npm install &&
+               npx prisma db push &&
+               node prisma/seeder/seed.js &&
+               npx nodemon index.js"
     restart: always
     ports:
       - "3002:3000"
@@ -34,7 +25,7 @@ services:
     ports:
       - "27019:27017"
     volumes:
-      - mini_game_mongo_data:/data/db
+      - mini_game_mongo_data:/var/lib/mongo
     command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
     healthcheck:
       test: test $$(mongosh --eval "rs.initiate()" | grep 'ok') == 1
