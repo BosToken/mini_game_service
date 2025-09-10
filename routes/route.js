@@ -69,7 +69,7 @@ roleRouter.post("/update/:id", (req, res) => {
 cardRouter.get("/user", (req, res) => {
   cardController.getByUser(req, res);
 });
-cardRouter.post("/random", (req, res) => {
+cardRouter.get("/random", authMiddleware, (req, res) => {
   cardController.randomCreate(req, res);
 });
 cardRouter.post("/update/:id", (req, res) => {

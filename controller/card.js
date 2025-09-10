@@ -45,7 +45,7 @@ module.exports = {
   },
   async randomCreate(req, res) {
     try {
-      const request = req.body;
+      const request = {id: req.user.id};
       const user = await userAction.getFirst({
         where: request,
       });
@@ -55,7 +55,7 @@ module.exports = {
         },
       });
       if (limit.gachaLimit > Date.now()) {
-        const date = new Date(limit.gachaLimit);
+        const date = new Date(Number(limit.gachaLimit));
         const formatted = `${date.getDate().toString().padStart(2, "0")}-${(date.getMonth() + 1)
           .toString()
           .padStart(2, "0")}-${date.getFullYear()} : ${date.getHours().toString().padStart(2, "0")}:${date
@@ -82,10 +82,8 @@ module.exports = {
           .json(response.error(errorCard.details[0].message));
       }
       const card = await cardAction.create(valueCard);
-      const skipRole = Math.floor(
-        Math.random() * (await roleAction.getCount())
-      );
-      const role = await roleAction.getFirst(skipRole);
+      const skipRole = Math.floor(Math.random() * await roleAction.getCount());
+      const role = await roleAction.getFirst({skip: skipRole});
       const rarity = await rarityController.random();
       const { error: errorDetail, value: valueDetail } =
         cardDetailValidate.createSchema.validate({

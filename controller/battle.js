@@ -21,7 +21,7 @@ module.exports = {
         player.userLimit.id
       );
       if (!playerBattleLimit) {
-        const date = new Date(player.userLimit.battleLimit);
+        const date = new Date(Number(player.userLimit.battleLimit));
         const formatted = `${date.getDate().toString().padStart(2, "0")}-${(
           date.getMonth() + 1
         )

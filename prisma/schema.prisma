@@ -23,8 +23,8 @@ model userLimits {
   id          String @id @default(uuid())
   userId      String @unique 
   user        users  @relation(fields: [userId], references: [id])
-  gachaLimit  Int
-  battleLimit Int
+  gachaLimit  BigInt   @db.BigInt
+  battleLimit BigInt   @db.BigInt
 }
 
 model cards {

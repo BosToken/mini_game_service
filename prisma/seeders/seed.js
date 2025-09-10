@@ -83,10 +83,26 @@ async function main() {
         priority: 1
     }
   });
+  
+  const role2 = await prisma.roles.create({
+    data: {
+        name: "Lancer",
+        description: "Lancer",
+        priority: 2
+    }
+  });
+
+  const role3 = await prisma.roles.create({
+    data: {
+        name: "Archer",
+        description: "Archer",
+        priority: 3
+    }
+  });
 
   const card = await prisma.cards.create({
     data: {
-        characterId: "309f5da5-078c-447e-b59d-02b277fa8ac5",
+        characterId: "01ac3a20-9a7b-4482-8254-76b36e06a67e",
     }
   })
 
