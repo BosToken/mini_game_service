@@ -63,7 +63,7 @@ module.exports = {
           take: 1,
         });
 
-        if (candidate && candidate.id !== player.id) {
+        if (candidate && candidate.id !== player.id && candidate.discordId !== '839862527815057469') {
           enemy = candidate;
         }
         attempts++;
@@ -103,7 +103,7 @@ module.exports = {
       );
 
       if (!playerBattleLimit) {
-        const date = new Date(player.userLimit.battleLimit);
+        const date = new Date(Number(player.userLimit.battleLimit));
         const formatted = `${date.getDate().toString().padStart(2, "0")}-${(
           date.getMonth() + 1
         )

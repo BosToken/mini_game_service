@@ -1,5 +1,6 @@
 const { PrismaClient } = require("../../generated/prisma");
 const prisma = new PrismaClient();
+const characterRemote = require("../../remotes/character");
 
 async function main() {
   const user = await prisma.users.create({
@@ -8,127 +9,222 @@ async function main() {
     },
   });
 
+  const user2 = await prisma.users.create({
+    data: {
+      discordId: "839862527815057469",
+    },
+  });
+
   const userLimit = await prisma.userLimits.create({
     data: {
       userId: user.id,
       gachaLimit: 0,
-      battleLimit: 0
+      battleLimit: 0,
+    },
+  });
+
+  const userLimit2 = await prisma.userLimits.create({
+    data: {
+      userId: user2.id,
+      gachaLimit: 0,
+      battleLimit: 0,
     },
   });
 
   const rarity = await prisma.rarities.create({
     data: {
-        name: "Common",
-        description: "Common",
-        rate: 60,
-        minAtk: 10,
-        maxAtk: 50,
-        minHealth: 100,
-        maxHealth: 150
-    }
+      name: "Common",
+      description: "Common",
+      rate: 60,
+      minAtk: 10,
+      maxAtk: 50,
+      minHealth: 100,
+      maxHealth: 150,
+    },
   });
 
   const rarity2 = await prisma.rarities.create({
     data: {
-        name: "Uncommon",
-        description: "Uncommon",
-        rate: 25,
-        minAtk: 40,
-        maxAtk: 100,
-        minHealth: 140,
-        maxHealth: 200
-    }
+      name: "Uncommon",
+      description: "Uncommon",
+      rate: 25,
+      minAtk: 40,
+      maxAtk: 100,
+      minHealth: 140,
+      maxHealth: 200,
+    },
   });
 
   const rarity3 = await prisma.rarities.create({
     data: {
-        name: "Rare",
-        description: "Rare",
-        rate: 10,
-        minAtk: 90,
-        maxAtk: 150,
-        minHealth: 190,
-        maxHealth: 250
-    }
+      name: "Rare",
+      description: "Rare",
+      rate: 10,
+      minAtk: 90,
+      maxAtk: 150,
+      minHealth: 190,
+      maxHealth: 250,
+    },
   });
 
   const rarity4 = await prisma.rarities.create({
     data: {
-        name: "Super Rare",
-        description: "Super Rare",
-        rate: 4,
-        minAtk: 140,
-        maxAtk: 200,
-        minHealth: 240,
-        maxHealth: 300
-    }
+      name: "Super Rare",
+      description: "Super Rare",
+      rate: 4,
+      minAtk: 140,
+      maxAtk: 200,
+      minHealth: 240,
+      maxHealth: 300,
+    },
   });
 
   const rarity5 = await prisma.rarities.create({
     data: {
-        name: "Specially Super Rare",
-        description: "Specially Super Rare",
-        rate: 1,
-        minAtk: 190,
-        maxAtk: 250,
-        minHealth: 290,
-        maxHealth: 350
-    }
+      name: "Specially Super Rare",
+      description: "Specially Super Rare",
+      rate: 1,
+      minAtk: 190,
+      maxAtk: 250,
+      minHealth: 290,
+      maxHealth: 350,
+    },
   });
 
   const role = await prisma.roles.create({
     data: {
-        name: "Saber",
-        description: "Saber",
-        priority: 1
-    }
+      name: "Saber",
+      description: "Saber",
+      priority: 1,
+    },
   });
-  
+
   const role2 = await prisma.roles.create({
     data: {
-        name: "Lancer",
-        description: "Lancer",
-        priority: 2
-    }
+      name: "Lancer",
+      description: "Lancer",
+      priority: 2,
+    },
   });
 
   const role3 = await prisma.roles.create({
     data: {
-        name: "Archer",
-        description: "Archer",
-        priority: 3
-    }
+      name: "Archer",
+      description: "Archer",
+      priority: 3,
+    },
   });
 
+  const character = await characterRemote.random();
   const card = await prisma.cards.create({
     data: {
-        characterId: "01ac3a20-9a7b-4482-8254-76b36e06a67e",
-    }
-  })
+      characterId: character.data.uuid,
+    },
+  });
+
+  const card2 = await prisma.cards.create({
+    data: {
+      characterId: character.data.uuid,
+    },
+  });
+
+  const card3 = await prisma.cards.create({
+    data: {
+      characterId: character.data.uuid,
+    },
+  });
+
+  const card4 = await prisma.cards.create({
+    data: {
+      characterId: character.data.uuid,
+    },
+  });
 
   const cardOnUser = await prisma.cardsOnUsers.create({
     data: {
-        userId: user.id,
-        cardId: card.id
-    }
-  })
+      userId: user.id,
+      cardId: card.id,
+    },
+  });
+
+  const cardOnUser2 = await prisma.cardsOnUsers.create({
+    data: {
+      userId: user2.id,
+      cardId: card2.id,
+    },
+  });
+
+  const cardOnUser3 = await prisma.cardsOnUsers.create({
+    data: {
+      userId: user2.id,
+      cardId: card3.id,
+    },
+  });
+
+  const cardOnUser4 = await prisma.cardsOnUsers.create({
+    data: {
+      userId: user2.id,
+      cardId: card4.id,
+    },
+  });
 
   const cardDetail = await prisma.cardDetails.create({
     data: {
-        level: 1,
-        cardId: card.id,
-        rarityId: rarity.id,
-        roleId: role.id,
-        atk: 50,
-        health: 150 
-    }
-  })
+      level: 1,
+      cardId: card.id,
+      rarityId: rarity.id,
+      roleId: role.id,
+      atk: 50,
+      health: 150,
+    },
+  });
+
+  const cardDetail2 = await prisma.cardDetails.create({
+    data: {
+      level: 99,
+      cardId: card2.id,
+      rarityId: rarity5.id,
+      roleId: role.id,
+      atk: 999,
+      health: 999,
+    },
+  });
+
+  const cardDetail3 = await prisma.cardDetails.create({
+    data: {
+      level: 99,
+      cardId: card3.id,
+      rarityId: rarity5.id,
+      roleId: role2.id,
+      atk: 9999,
+      health: 9999,
+    },
+  });
+
+  const cardDetail4 = await prisma.cardDetails.create({
+    data: {
+      level: 99,
+      cardId: card4.id,
+      rarityId: rarity5.id,
+      roleId: role3.id,
+      atk: 9999,
+      health: 9999,
+    },
+  });
 
   const team = await prisma.teams.create({
     data: {
-        userId: user.id
-    }
-  })
+      userId: user.id,
+    },
+  });
+
+  const teamGM = [card2.id, card3.id, card4.id]
+  const team2 = await prisma.teams.create({
+    data: {
+      userId: user2.id,
+      cardId: JSON.stringify(teamGM)
+    },
+  });
 }
 
 main()
