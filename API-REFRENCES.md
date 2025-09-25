@@ -177,6 +177,9 @@ Body:
 ### Authorization
 
 #### Login
+```http
+  POST /auth/login
+```
 Body:
 | Key        | Type     | Level      | Description                                              |
 | :--------- | :------- | :--------- | :------------------------------------------------------- |
